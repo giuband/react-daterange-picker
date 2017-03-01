@@ -11,6 +11,7 @@ import CalendarDatePeriod from './CalendarDatePeriod';
 import CalendarHighlight from './CalendarHighlight';
 import CalendarSelection from './CalendarSelection';
 
+const TOUCHSTART_TIMEOUT = 200;
 
 const CalendarDate = React.createClass({
   mixins: [BemMixin, PureRenderMixin],
@@ -40,6 +41,8 @@ const CalendarDate = React.createClass({
     onUnHighlightDate: React.PropTypes.func,
     onSelectDate: React.PropTypes.func,
   },
+
+  isScrollingWithTouch: false,
 
   getInitialState() {
     return {
@@ -77,28 +80,21 @@ const CalendarDate = React.createClass({
     document.addEventListener('mouseup', this.mouseUp);
   },
 
-  touchEnd(event) {
-    event.preventDefault();
-    this.props.onHighlightDate(this.props.date);
-    this.props.onSelectDate(this.props.date);
-
+  touchEnd() {
     if (this.isUnmounted) {
       return;
+    } else if (this.isScrollingWithTouch) {
+      this.isScrollingWithTouch = false;
+    } else {
+      this.props.onHighlightDate(this.props.date);
+      this.props.onSelectDate(this.props.date);
     }
-
-    if (this.state.mouseDown) {
-      this.setState({
-        mouseDown: false,
-      });
-    }
-    document.removeEventListener('touchend', this.touchEnd);
   },
 
   touchStart() {
-    this.setState({
-      mouseDown: true,
-    });
-    document.addEventListener('touchend', this.touchEnd);
+    setTimeout(() => {
+      this.isScrollingWithTouch = true;
+    }, TOUCHSTART_TIMEOUT);
   },
 
   mouseEnter() {
@@ -222,6 +218,7 @@ const CalendarDate = React.createClass({
       <td className={this.cx({element: 'Date', modifiers: bemModifiers, states: bemStates})}
         style={cellStyle}
         onTouchStart={this.touchStart}
+        onTouchEnd={this.touchEnd}
         onMouseEnter={this.mouseEnter}
         onMouseLeave={this.mouseLeave}
         onMouseDown={this.mouseDown}>
