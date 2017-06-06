@@ -19,7 +19,7 @@ const CalendarHighlight = createClass({
     let states = {};
 
     return (
-      <div className={this.cx({states, modifiers})} />
+      <div className={this.cx({element: 'CalendarHighlight', states, modifiers})} />
     );
   },
 });

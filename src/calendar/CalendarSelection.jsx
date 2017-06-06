@@ -22,7 +22,7 @@ const CalendarSelection = createClass({
     };
 
     return (
-      <div className={this.cx({states, modifiers})} />
+      <div className={this.cx({element: "CalendarSelection", states, modifiers})} />
     );
   },
 });

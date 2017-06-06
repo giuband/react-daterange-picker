@@ -28,6 +28,7 @@ const PaginationArrow = createClass({
     let states = {disabled};
 
     let elementOpts = {
+      element: 'PaginationArrow',
       modifiers,
       states,
     };

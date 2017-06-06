@@ -24,7 +24,7 @@ const CalendarDatePeriod = createClass({
     }
 
     return (
-      <div style={style} className={this.cx({modifiers})} />
+      <div style={style} className={this.cx({element: "CalendarDatePeriod", modifiers})} />
     );
   },
 });
